@@ -1,5 +1,6 @@
 
 import mongoose from "mongoose"
+
 const taskSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -10,14 +11,14 @@ description:{
     required:[true,"add describition to  your task"]
 },
 startDate:{
-    type:Date,
+    type:String,
     required:[true,"startdate is required"]
 },
 startTime:{
     type:String
 },
 endDate:{
-    type:Date,
+    type:String,
     require:[true,"endDate is required"]
 },
 endTime:{
