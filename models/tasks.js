@@ -11,14 +11,14 @@ description:{
     required:[true,"add describition to  your task"]
 },
 startDate:{
-    type:String,
+    type:Date,
     required:[true,"startdate is required"]
 },
 startTime:{
     type:String
 },
 endDate:{
-    type:String,
+    type:Date,
     require:[true,"endDate is required"]
 },
 endTime:{
@@ -34,10 +34,14 @@ duration:{
 },
 durationType:{
     type:String,
-    enum:["hours","days","minutes","seconds"],
+    enum:["hours","days","minutes","seconds","months","years"],
+},
+completedDate:{
+    type:String
+},
+completedTime:{
+    type:String
 }
-
-
 })
 const taskModel=mongoose.model("todo",taskSchema)
 export default taskModel

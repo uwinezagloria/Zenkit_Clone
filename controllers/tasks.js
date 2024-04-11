@@ -23,19 +23,6 @@ const allControllers = {
         }
         next()
     },
-    //modifying startDate and endDate
-    modifyDate: async (req, res, next) => {
-        var startDate = new Date(req.body.startDate).toLocaleDateString()
-        var endDate = new Date(req.body.endDate).toLocaleDateString()
-
-        if (req.body.startDate) {
-            req.body.startDate = startDate
-        }
-        if (req.body.endDate) {
-            req.body.endDate = endDate
-        }
-        next();
-    },
     //getting all tasks
     getTasks: async (req, res) => {
         try {
@@ -86,12 +73,25 @@ const allControllers = {
             res.status(500).json({ error: error.message })
         }
     },
+     // modifying startDate and endDate 
+//  modifyDate: async (req, res, next) => {
+//     var startDate = new Date(req.body.startDate).toLocaleDateString()
+//     var endDate = new Date(req.body.endDate).toLocaleDateString()
+
+//     if (req.body.startDate) {
+//         req.body.startDate = startDate
+//     }
+//     if (req.body.endDate) {
+//         req.body.endDate = endDate
+//     }
+//     next();
+// }
     //duration
     setDuration: async (req, res, next) => {
         var startDate = moment(req.body.startDate)
         var endDate = moment(req.body.endDate)
         const differenceInMilliseconds = endDate.diff(startDate);
-        var differenceInSeconds = differenceInMilliseconds / 1000;
+        var differenceInSeconds =Math.round(differenceInMilliseconds / 1000);
         var minutes = Math.round(differenceInSeconds / 60);
         var hours = Math.round(minutes / 60);
         var days = Math.round(hours / 24);
@@ -112,7 +112,49 @@ const allControllers = {
             req.body.durationType = "days"
         }
         next()
+    },
+// seting completedDate and time 
+complete:async(req,res,next)=>{
+   var  completeDate=new Date(req.body.completedDate).toLocaleDateString()
+   var  completeTime=new Date(req.body.completedDate).toLocaleTimeString()
+    if(req.body.completedDate){
+req.body.completedDate=completeDate
+req.body.completedTime=completeTime
     }
+    next()
+},
+//seting status
+setStatus:async(req,res,next)=>{
+    const taskId=req.params.id
+    const date=await taskModel.findById(taskId)
+    var startDate;
+    var endDate;
+    var completedDate;
+    var duration;
+    var durationType;
+if(req.body.completedDate ){
+ var startDate=moment(date.startDate)
+ var endDate=moment(date.endDate)
+ var completedDate=moment(req.body.completedDate)
+ var today=moment()
+ var differenceWithToday=today.diff(endDate)
+  var differenceWithTodayinHours=Math.round(((differenceWithToday/1000)/60)/60)
+var differenceInMilliseconds=startDate.diff(endDate)
+var differenceInHours=Math.round(((differenceInMilliseconds/1000)/60)/60)
+if(completedDate<startDate){
+    throw new Error("completed date can not be great than startdate")
+}
+}
+if(!req.body.completedDate){
+    if(differenceWithTodayinHours>24){
+        req.body.status="Over-due"
+    }
+    if(endDate>today && differenceWithTodayinHours<24){
+        req.body.status="Late"
+    }
+}
 
+next()
+}
 }
 export default allControllers
