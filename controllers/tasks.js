@@ -1,7 +1,43 @@
 import taskModel from "../models/tasks.js";
 import moment from "moment"
 const allControllers = {
-    //creating new task
+  updateTask: async (req, res) => {
+        try {
+            const update = await taskModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            if (!update) {
+                return res.status(404).json({ message: `no task with id ${req.params.id}` })
+            }
+            //setting status
+            var startDate=moment(update.startDate)
+            var endDate=moment(update.endDate)
+            if(startDate.isAfter(endDate)){
+                return res.status(400).json({msg:"endDate must be after startDate"})
+            }
+            if(!update.completedDate){
+                     if(moment().add(24,'hours').isAfter(endDate)){
+                          update.status="Over-due"
+                     }
+                     if(moment().isAfter(endDate)){
+                    update.status="Late"
+                     }
+                        if(moment().isAfter(startDate) && moment().isBetween(startDate,endDate)){
+                            update.status="In-progress"
+                         
+                     }
+                     
+            }
+            var completedDate=moment(update.completedDate)
+            if(update.completedDate){
+                update.status="Completed"
+                //Updating Duration and Duration Type
+
+            }
+            res.status(200).json({ updatedTask: update })
+        }
+        catch (error) {
+            res.status(500).json({ error })
+        }
+    }, //creating new task
     createTask: async (req, res) => {
         try {
             const newTask = await taskModel.create(req.body)
@@ -20,6 +56,7 @@ const allControllers = {
         }
         if (req.body.endDate) {
             req.body.endTime = endTime
+        
         }
         next()
     },
@@ -34,18 +71,7 @@ const allControllers = {
         }
     },
     //updating task
-    updateTask: async (req, res) => {
-        try {
-            const update = await taskModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
-            if (!update) {
-                return res.status(404).json({ message: `no task with id ${req.params.id}` })
-            }
-            res.status(200).json({ updatedTask: update })
-        }
-        catch (error) {
-            res.status(500).json({ error })
-        }
-    },
+    
     //get task by id
     getById: async (req, res) => {
         const id = req.params.id
@@ -73,20 +99,6 @@ const allControllers = {
             res.status(500).json({ error: error.message })
         }
     },
-     // modifying startDate and endDate 
-//  modifyDate: async (req, res, next) => {
-//     var startDate = new Date(req.body.startDate).toLocaleDateString()
-//     var endDate = new Date(req.body.endDate).toLocaleDateString()
-
-//     if (req.body.startDate) {
-//         req.body.startDate = startDate
-//     }
-//     if (req.body.endDate) {
-//         req.body.endDate = endDate
-//     }
-//     next();
-// }
-    //duration
     setDuration: async (req, res, next) => {
         var startDate = moment(req.body.startDate)
         var endDate = moment(req.body.endDate)
@@ -113,48 +125,15 @@ const allControllers = {
         }
         next()
     },
-// seting completedDate and time 
+// marking task completedDate and time 
 complete:async(req,res,next)=>{
-   var  completeDate=new Date(req.body.completedDate).toLocaleDateString()
    var  completeTime=new Date(req.body.completedDate).toLocaleTimeString()
     if(req.body.completedDate){
-req.body.completedDate=completeDate
 req.body.completedTime=completeTime
     }
     next()
 },
-//seting status
-setStatus:async(req,res,next)=>{
-    const taskId=req.params.id
-    const date=await taskModel.findById(taskId)
-    var startDate;
-    var endDate;
-    var completedDate;
-    var duration;
-    var durationType;
-if(req.body.completedDate ){
- var startDate=moment(date.startDate)
- var endDate=moment(date.endDate)
- var completedDate=moment(req.body.completedDate)
- var today=moment()
- var differenceWithToday=today.diff(endDate)
-  var differenceWithTodayinHours=Math.round(((differenceWithToday/1000)/60)/60)
-var differenceInMilliseconds=startDate.diff(endDate)
-var differenceInHours=Math.round(((differenceInMilliseconds/1000)/60)/60)
-if(completedDate<startDate){
-    throw new Error("completed date can not be great than startdate")
-}
-}
-if(!req.body.completedDate){
-    if(differenceWithTodayinHours>24){
-        req.body.status="Over-due"
-    }
-    if(endDate>today && differenceWithTodayinHours<24){
-        req.body.status="Late"
-    }
-}
 
-next()
-}
+
 }
 export default allControllers

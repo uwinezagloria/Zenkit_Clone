@@ -34,7 +34,7 @@ duration:{
 },
 durationType:{
     type:String,
-    enum:["hours","days","minutes","seconds","months","years"],
+    enum:["hours","days","minutes","seconds"],
 },
 completedDate:{
     type:String
