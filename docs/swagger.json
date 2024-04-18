@@ -110,7 +110,7 @@
         "get": {
           "summary": "Get a task by ID",
           "description": "Get a task by ID",
-          "tags": ["Contacts"],
+          "tags": ["tasks"],
           "parameters": [
             {
               "name": "id",
