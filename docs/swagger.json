@@ -1,0 +1,177 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "zenkit_clone",
+      "description": "todo application",
+      "version": "1.0.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "",
+    "schemes": ["http", "https"],
+    "paths": {
+      "/tasks": {
+        "post": {
+          "summary": "Create a new task",
+          "description": "Create a new task",
+          "tags": ["tasks"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "schema": {
+                "$ref": "#/definitions/todo"
+              },
+              "required": true,
+              "description": "todo object"
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "task created"
+            }
+          }
+        },
+"get":{
+    "summary": "get all task",
+    "description": "get all task",
+    "tags": ["tasks"],
+    "parameters": [
+      {
+        "in": "path",
+        "name": "body",
+        "schema": {
+          "$ref": "#/definitions/todo"
+        },
+        "required": true,
+        "description": "todo object"
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "get tasks"
+      }
+    }
+}
+      },
+      "/tasks/{id}": {
+        "patch": {
+          "summary": "Update a task",
+          "description": "Update a task",
+          "tags": ["tasks"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID of the task to update",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "schema": {
+                "$ref": "#/definitions/todo"
+              },
+              "required": true,
+              "description": "Updated task object"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "task updated"
+            },
+            "404": {
+              "description": "task not found"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete a task by ID",
+          "description": "Delete a task by ID",
+          "tags": ["tasks"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID of the task to delete",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "task deleted"
+            },
+            "404": {
+              "description": "task not found"
+            }
+          }
+        },
+        "get": {
+          "summary": "Get a task by ID",
+          "description": "Get a task by ID",
+          "tags": ["Contacts"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID of the task to retrieve",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response"
+            },
+            "404": {
+              "description": "task not found"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "tasks": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "durationType": {
+            "type": "string"
+          },
+          "completedDate": {
+            "type": "string"
+          },
+          "completedTime": {
+            "type": "string"
+          }
+        
+        },
+        "required": ["name"]
+      }
+    }
+  }
+  

@@ -4,10 +4,13 @@ import dotenv from "dotenv"
 import router from "./routes/tasks.js";
 import customError from "./errors/CustomError.js";
 import errorHandler from "./middlewares/ErrorHandler.js";
+import swagger from "./docs/swagger.json" assert{type:"json"}
+import swaggerUi from "swagger-ui-express"
 dotenv.config()
 const app=express()
 app.use(express.json())
 app.use(router)
+app.use("/zenkit-clone-api", swaggerUi.serve, swaggerUi.setup(swagger))
 app.all('*',(req,res,next)=>{
     const err=new customError(`Can't find ${req.originalUrl} on this Server`,404)
     next(err)

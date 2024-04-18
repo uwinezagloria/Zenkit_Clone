@@ -3,23 +3,19 @@ import mongoose from "mongoose"
 
 const taskSchema=new mongoose.Schema({
     name:{
-        type:String,
-        // required:[true,"name of task is required"]
+        type:String
     },
 description:{
-    type:String,
-    required:[true,"add describition to  your task"]
+    type:String
 },
 startDate:{
-    type:Date,
-    required:[true,"startdate is required"]
+    type:Date
 },
 startTime:{
     type:String
 },
 endDate:{
-    type:Date,
-    require:[true,"endDate is required"]
+    type:Date
 },
 endTime:{
     type:String
