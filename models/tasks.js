@@ -4,7 +4,7 @@ import mongoose from "mongoose"
 const taskSchema=new mongoose.Schema({
     name:{
         type:String,
-        required:[true,"name of task is required"]
+        // required:[true,"name of task is required"]
     },
 description:{
     type:String,
@@ -30,11 +30,13 @@ status:{
     default:"Todo"
 },
 duration:{
-    type:String,
+    type:Number,
+    default:0,
 },
 durationType:{
     type:String,
     enum:["hours","days","minutes","seconds"],
+    default:"seconds",
 },
 completedDate:{
     type:String

@@ -2,10 +2,16 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv"
 import router from "./routes/tasks.js";
+import customError from "./errors/CustomError.js";
+import errorHandler from "./middlewares/ErrorHandler.js";
 dotenv.config()
 const app=express()
 app.use(express.json())
 app.use(router)
+app.all('*',(req,res,next)=>{
+    const err=new customError(`Can't find ${req.originalUrl} on this Server`,404)
+    next(err)
+})
 const databaseString=process.env.MONGODB_URL
 const port=process.env.PORT
 mongoose.connect(databaseString)
@@ -16,12 +22,7 @@ mongoose.connect(databaseString)
     })
 })
 .catch((error)=>{
-    console.log(error)
+    console.log(error.message)
 })
-// const startDate = new Date("2024-03-19T13:56:00.767Z");
-// const endDate = new Date("2024-04-09T12:56:00.767Z");
 
-// const differenceInMilliseconds = endDate - startDate;
-// console.log(differenceInMilliseconds/1000)
-
-console.log()
+app.use(errorHandler)
