@@ -132,7 +132,7 @@
       }
     },
     "definitions": {
-      "tasks": {
+      "todo": {
         "type": "object",
         "properties": {
           "name": {
